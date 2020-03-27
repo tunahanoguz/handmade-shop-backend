@@ -10,12 +10,13 @@ import ProductFavoriteRoutes from '../routes/ProductFavoriteRoutes';
 import ProductCommentRoutes from '../routes/ProductCommentRoutes';
 import ProductScoreRoutes from '../routes/ProductScoreRoutes';
 import ProductGenderRoutes from '../routes/ProductGenderRoutes';
+import OrderRoutes from '../routes/OrderRoutes'
 import RoleRoutes from '../routes/RoleRoutes';
 import StoreRoutes from '../routes/StoreRoutes';
 import StoreScoreRoutes from '../routes/StoreScoreRoutes';
 import ProductCategoryRoutes from '../routes/ProductCategoryRoutes';
-import UserAddressRoutes from '../routes/UserAddressRoutes'
-import UserCreditCardRoutes from '../routes/UserCreditCardRoutes'
+import UserAddressRoutes from '../routes/UserAddressRoutes';
+import UserCreditCardRoutes from '../routes/UserCreditCardRoutes';
 
 class App {
     public app: express.Application;
@@ -44,11 +45,13 @@ class App {
         const router: express.Router = express.Router();
 
         this.app.use('/auth', UserRoutes);
+        this.app.use('/auth', UserRoutes);
         this.app.use('/product', authMiddleware, ProductRoutes);
         this.app.use('/product-favorite', authMiddleware, ProductFavoriteRoutes);
         this.app.use('/product-comment', authMiddleware, ProductCommentRoutes);
         this.app.use('/product-score', authMiddleware, ProductScoreRoutes);
         this.app.use('/product-gender', authMiddleware, ProductGenderRoutes);
+        this.app.use('/order', authMiddleware, OrderRoutes);
         this.app.use('/role', authMiddleware, RoleRoutes);
         this.app.use('/store', authMiddleware, StoreRoutes);
         this.app.use('/store-score', authMiddleware, StoreScoreRoutes);

@@ -1,6 +1,22 @@
 import {Schema, model} from 'mongoose';
 
 const OrderSchema = new Schema({
+    quality: {
+        type: Number,
+        required: true,
+    },
+    color: {
+        type: String,
+        required: false,
+    },
+    size: {
+        type: String,
+        required: false,
+    },
+    orderDate: {
+        type: Date,
+        default: new Date(),
+    },
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User',
@@ -12,22 +28,6 @@ const OrderSchema = new Schema({
     address: {
         type: Schema.Types.ObjectId,
         ref: 'UserAddress',
-    },
-    orderDate: {
-        type: Date,
-        default: new Date(),
-    },
-    quality: {
-        type: Number,
-        required: true,
-    },
-    color: {
-        type: String,
-        required: false,
-    },
-    size: {
-        type: Number,
-        required: false,
     },
 });
 
