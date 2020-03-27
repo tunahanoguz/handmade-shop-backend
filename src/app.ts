@@ -6,7 +6,9 @@ import {authMiddleware} from "./authMiddleware";
 
 import UserRoutes from "../routes/UserRoutes";
 import ProductRoutes from '../routes/ProductRoutes';
+import ProductFavoriteRoutes from '../routes/ProductFavoriteRoutes';
 import ProductCommentRoutes from '../routes/ProductCommentRoutes';
+import ProductGenderRoutes from '../routes/ProductGenderRoutes';
 import RoleRoutes from '../routes/RoleRoutes';
 import StoreRoutes from '../routes/StoreRoutes';
 import ProductCategoryRoutes from '../routes/ProductCategoryRoutes';
@@ -26,7 +28,8 @@ class App {
         const MONGO_URL = 'mongodb://localhost:27017/handmade_shop';
         mongoose.connect(MONGO_URL, {
             useNewUrlParser: true,
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
+            useFindAndModify: false,
         });
 
         this.app.set('port', process.env.PORT || 5000);
@@ -40,7 +43,9 @@ class App {
 
         this.app.use('/auth', UserRoutes);
         this.app.use('/product', authMiddleware, ProductRoutes);
+        this.app.use('/product-favorite', authMiddleware, ProductFavoriteRoutes);
         this.app.use('/product-comment', authMiddleware, ProductCommentRoutes);
+        this.app.use('/product-gender', authMiddleware, ProductGenderRoutes);
         this.app.use('/role', authMiddleware, RoleRoutes);
         this.app.use('/store', authMiddleware, StoreRoutes);
         this.app.use('/category', authMiddleware, ProductCategoryRoutes);

@@ -3,7 +3,7 @@ import {Schema, model} from 'mongoose';
 const ProductFavoriteSchema = new Schema({
     date: {
         type: Date,
-        required: new Date(),
+        default: new Date(),
     },
     user: {
         type: Schema.Types.ObjectId,
