@@ -10,11 +10,11 @@ const ProductScoreSchema = new Schema({
         default: new Date(),
     },
     product: {
-        type: Schema.Types.objectId,
+        type: Schema.Types.ObjectId,
         ref: 'Product',
     },
     user: {
-        type: Schema.Types.objectId,
+        type: Schema.Types.ObjectId,
         ref: 'User',
     },
 });
