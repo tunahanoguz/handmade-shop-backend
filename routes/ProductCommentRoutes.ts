@@ -1,7 +1,7 @@
 import {Router, Request, Response} from 'express';
-import UserCreditCard from "../models/UserCreditCard";
+import ProductComment from "../models/ProductComment";
 
-class UserCreditCardRoutes {
+class ProductCommentRoutes {
     router: Router;
 
     constructor() {
@@ -10,20 +10,21 @@ class UserCreditCardRoutes {
     }
 
     public async create(req: Request, res: Response): Promise<void> {
-        const creditCard = new UserCreditCard(req.body);
+        const comment = new ProductComment(req.body);
 
         try {
-            const savedCreditCard = await creditCard.save();
-            res.send(savedCreditCard);
+            const savedComment = await comment.save();
+            res.send(savedComment);
         } catch (err){
             res.send(err);
         }
     }
 
     public async getAll(req: Request, res: Response): Promise<void> {
+        const {productID} = req.params;
         try {
-            const creditCard = await UserCreditCard.find();
-            res.send(creditCard);
+            const comments = await ProductComment.find({product: productID});
+            res.send(comments);
         } catch (err){
             res.send(err);
         }
@@ -33,8 +34,8 @@ class UserCreditCardRoutes {
         const {id} = req.params;
 
         try {
-            const creditCard = await UserCreditCard.findById(id);
-            res.send(creditCard);
+            const comment = await ProductComment.findById(id);
+            res.send(comment);
         } catch (err){
             res.send(err);
         }
@@ -44,8 +45,8 @@ class UserCreditCardRoutes {
         const {id} = req.params;
 
         try {
-            const creditCard = await UserCreditCard.findByIdAndUpdate(id, req.body, {new: true});
-            res.send(creditCard);
+            const comment = await ProductComment.findByIdAndUpdate(id, req.body, {new: true});
+            res.send(comment);
         } catch (err){
             res.send(err);
         }
@@ -55,7 +56,7 @@ class UserCreditCardRoutes {
         const {id} = req.params;
 
         try {
-            await UserCreditCard.findByIdAndDelete(id);
+            await ProductComment.findByIdAndDelete(id);
             res.json({message: "Successful!"});
         } catch (err){
             res.send(err);
@@ -65,11 +66,11 @@ class UserCreditCardRoutes {
     routes() {
         this.router.post('/', this.create);
         this.router.get('/:id', this.getSingle);
-        this.router.get('/', this.getAll);
+        this.router.get('/all/:productID', this.getAll);
         this.router.put('/:id', this.update);
         this.router.delete('/:id', this.delete);
     }
 }
 
-const userCreditCardRoutes = new UserCreditCardRoutes();
-export default userCreditCardRoutes.router;
+const productCommentRoutes = new ProductCommentRoutes();
+export default productCommentRoutes.router;

@@ -6,6 +6,7 @@ import {authMiddleware} from "./authMiddleware";
 
 import UserRoutes from "../routes/UserRoutes";
 import ProductRoutes from '../routes/ProductRoutes';
+import ProductCommentRoutes from '../routes/ProductCommentRoutes';
 import RoleRoutes from '../routes/RoleRoutes';
 import StoreRoutes from '../routes/StoreRoutes';
 import ProductCategoryRoutes from '../routes/ProductCategoryRoutes';
@@ -39,6 +40,7 @@ class App {
 
         this.app.use('/auth', UserRoutes);
         this.app.use('/product', authMiddleware, ProductRoutes);
+        this.app.use('/product-comment', authMiddleware, ProductCommentRoutes);
         this.app.use('/role', authMiddleware, RoleRoutes);
         this.app.use('/store', authMiddleware, StoreRoutes);
         this.app.use('/category', authMiddleware, ProductCategoryRoutes);
@@ -56,3 +58,5 @@ class App {
 
 const app = new App();
 app.start();
+
+export default app;

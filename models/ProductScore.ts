@@ -1,7 +1,7 @@
 import {Schema, model} from 'mongoose';
 
-const ProductPointSchema = new Schema({
-    point: {
+const ProductScoreSchema = new Schema({
+    score: {
         type: Number,
         required: true,
     },
@@ -19,6 +19,6 @@ const ProductPointSchema = new Schema({
     },
 });
 
-const ProductPoint = model('ProductPoint', ProductPointSchema);
+const ProductScore = model('ProductScore', ProductScoreSchema);
 
-export default ProductPoint;
+export default ProductScore;
