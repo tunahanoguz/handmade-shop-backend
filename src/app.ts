@@ -12,6 +12,7 @@ import ProductScoreRoutes from '../routes/ProductScoreRoutes';
 import ProductGenderRoutes from '../routes/ProductGenderRoutes';
 import RoleRoutes from '../routes/RoleRoutes';
 import StoreRoutes from '../routes/StoreRoutes';
+import StoreScoreRoutes from '../routes/StoreScoreRoutes';
 import ProductCategoryRoutes from '../routes/ProductCategoryRoutes';
 import UserAddressRoutes from '../routes/UserAddressRoutes'
 import UserCreditCardRoutes from '../routes/UserCreditCardRoutes'
@@ -50,6 +51,7 @@ class App {
         this.app.use('/product-gender', authMiddleware, ProductGenderRoutes);
         this.app.use('/role', authMiddleware, RoleRoutes);
         this.app.use('/store', authMiddleware, StoreRoutes);
+        this.app.use('/store-score', authMiddleware, StoreScoreRoutes);
         this.app.use('/category', authMiddleware, ProductCategoryRoutes);
         this.app.use('/user-address', authMiddleware, UserAddressRoutes);
         this.app.use('/user-credit-card', authMiddleware, UserCreditCardRoutes);

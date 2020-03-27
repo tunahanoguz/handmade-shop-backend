@@ -1,7 +1,7 @@
 import {Schema, model} from 'mongoose';
 
 const StorePointSchema = new Schema({
-    point: {
+    score: {
         type: Number,
         required: true,
     },
@@ -10,15 +10,15 @@ const StorePointSchema = new Schema({
         default: new Date(),
     },
     store: {
-        type: Schema.Types.objectId,
+        type: Schema.Types.ObjectId,
         ref: 'Store',
     },
     user: {
-        type: Schema.Types.objectId,
+        type: Schema.Types.ObjectId,
         ref: 'User',
     },
 });
 
-const StorePoint = model('StorePoint', StorePointSchema);
+const StoreScore = model('StoreScore', StorePointSchema);
 
-export default StorePoint;
+export default StoreScore;
