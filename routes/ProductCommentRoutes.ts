@@ -15,17 +15,18 @@ class ProductCommentRoutes {
         try {
             const savedComment = await comment.save();
             res.send(savedComment);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
 
     public async getAll(req: Request, res: Response): Promise<void> {
         const {productID} = req.params;
+
         try {
             const comments = await ProductComment.find({product: productID});
             res.send(comments);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -36,7 +37,7 @@ class ProductCommentRoutes {
         try {
             const comment = await ProductComment.findById(id);
             res.send(comment);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -45,9 +46,12 @@ class ProductCommentRoutes {
         const {id} = req.params;
 
         try {
-            const comment = await ProductComment.findByIdAndUpdate(id, req.body, {new: true});
+            const foundComment = await ProductComment.findById(id);
+            const commentBody = foundComment.body;
+            const newCommentBody = commentBody + ' ' + req.body.body;
+            const comment = await ProductComment.findByIdAndUpdate(id, {body: newCommentBody}, {new: true});
             res.send(comment);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -58,7 +62,7 @@ class ProductCommentRoutes {
         try {
             await ProductComment.findByIdAndDelete(id);
             res.json({message: "Successful!"});
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }

@@ -15,7 +15,7 @@ class ProductScoreRoutes {
         try {
             const savedScore = await score.save();
             res.send(savedScore);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -26,7 +26,7 @@ class ProductScoreRoutes {
         try {
             const scores = await ProductScore.find({product: productID});
             res.send(scores);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -37,7 +37,7 @@ class ProductScoreRoutes {
         try {
             const score = await ProductScore.findById(id);
             res.send(score);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -48,7 +48,7 @@ class ProductScoreRoutes {
         try {
             const score = await ProductScore.findByIdAndUpdate(id, req.body, {new: true});
             res.send(score);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -59,7 +59,7 @@ class ProductScoreRoutes {
         try {
             await ProductScore.findByIdAndDelete(id);
             res.json({message: "Successful!"});
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }

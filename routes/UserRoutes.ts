@@ -10,10 +10,10 @@ import {JWT_SECRET_KEY} from '../src/constants';
 class UserRoutes {
     router: Router;
     storage = multer.diskStorage({
-        destination: function(req, file, cb){
+        destination: function (req, file, cb) {
             cb(null, './uploads/profilePicture');
         },
-        filename: function(req, file, cb){
+        filename: function (req, file, cb) {
             cb(null, dateformat(new Date(), "dd-mm-yyyy-hh-MM-ss") + '-' + file.originalname);
         }
     });
@@ -51,10 +51,10 @@ class UserRoutes {
             const refreshToken = await jwt.sign(user.toJSON(), JWT_SECRET_KEY);
 
             await user.save(async (err: any, savedUser: any) => {
-                if (err){
+                if (err) {
                     res.send(err).status(400);
                 } else {
-                    if (req.file){
+                    if (req.file) {
                         const profilePicture = new ProfilePicture({
                             name: req.file.filename,
                             user: savedUser
@@ -76,11 +76,11 @@ class UserRoutes {
         const {email, password} = req.body;
 
         await User.findOne({email}, async (err: any, user: any) => {
-            if (!err){
+            if (!err) {
                 await bcrypt.hash(password, 10, async (err: any, hash: string) => {
-                    if (!err){
+                    if (!err) {
                         await bcrypt.compare(user.password, hash, async (err, r) => {
-                            if (!err){
+                            if (!err) {
                                 const token = await jwt.sign(user.toJSON(), JWT_SECRET_KEY, {
                                     expiresIn: '1h',
                                 });
@@ -119,7 +119,7 @@ class UserRoutes {
         const {token} = req.body;
 
         jwt.verify(token, JWT_SECRET_KEY, (err: any, user: any) => {
-            if (!err){
+            if (!err) {
                 const tokens = this.createToken(user);
                 res.send(tokens).status(200);
             } else {
@@ -128,7 +128,7 @@ class UserRoutes {
         });
     }
 
-    routes(){
+    routes() {
         this.router.post('/register', this.upload.single('profilePicture'), this.register);
         this.router.post('/login', this.login);
         this.router.post('/refresh-token', this.refreshToken);

@@ -15,7 +15,7 @@ class OrderRoutes {
         try {
             await order.save();
             res.send(order);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -26,7 +26,7 @@ class OrderRoutes {
         try {
             const order = await Order.find({product: productID});
             res.send(order);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -37,7 +37,7 @@ class OrderRoutes {
         try {
             const order = await Order.find({user: userID});
             res.send(order);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -48,7 +48,7 @@ class OrderRoutes {
         try {
             const order = await Order.findById(id);
             res.send(order);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -59,7 +59,7 @@ class OrderRoutes {
         try {
             const order = await Order.findByIdAndUpdate(id, req.body, {new: true});
             res.send(order);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -70,7 +70,7 @@ class OrderRoutes {
         try {
             await Order.findByIdAndDelete(id);
             res.json({message: "Successful!"});
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }

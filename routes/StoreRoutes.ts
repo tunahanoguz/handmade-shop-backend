@@ -18,21 +18,21 @@ class StoreRoutes {
         this.router = Router();
 
         this.logoStorage = multer.diskStorage({
-            destination: function(req, file, cb){
+            destination: function (req, file, cb) {
                 const fieldName = file.fieldname;
                 const path = `./uploads/${fieldName}`;
                 cb(null, path);
             },
-            filename: function(req, file, cb){
+            filename: function (req, file, cb) {
                 cb(null, dateformat(new Date(), "dd-mm-yyyy-hh-MM-ss") + '-' + file.fieldname + '-' + file.originalname);
             }
         });
 
         this.coverPictureStorage = multer.diskStorage({
-            destination: function(req, file, cb){
+            destination: function (req, file, cb) {
                 cb(null, './uploads/coverPicture');
             },
-            filename: function(req, file, cb){
+            filename: function (req, file, cb) {
                 cb(null, dateformat(new Date(), "dd-mm-yyyy-hh-MM-ss") + '-' + file.originalname);
             }
         });
@@ -54,7 +54,7 @@ class StoreRoutes {
             const storeLogoName = files['storeLogo'][0]['filename'];
             const storeCoverPictureName = files['storeCoverPicture'][0]['filename'];
 
-            if (storeLogoName){
+            if (storeLogoName) {
                 const storeLogo = new StoreLogo({
                     name: storeLogoName,
                     store: savedStore
@@ -63,7 +63,7 @@ class StoreRoutes {
                 await storeLogo.save();
             }
 
-            if (storeCoverPictureName){
+            if (storeCoverPictureName) {
                 const storeCoverPicture = new StoreCoverPicture({
                     name: storeCoverPictureName,
                     store: savedStore
@@ -106,11 +106,11 @@ class StoreRoutes {
             const storeLogoName = files['storeLogo'][0]['filename'];
             const storeCoverPictureName = files['storeCoverPicture'][0]['filename'];
 
-            if (storeLogoName){
+            if (storeLogoName) {
                 await StoreLogo.findOneAndUpdate({store}, {name: storeLogoName});
             }
 
-            if (storeCoverPictureName){
+            if (storeCoverPictureName) {
                 await StoreCoverPicture.findOneAndUpdate({store}, {name: storeCoverPictureName});
             }
 
@@ -125,17 +125,17 @@ class StoreRoutes {
 
         try {
             await Store.findByIdAndDelete(id, async function (err) {
-                if (!err){
-                    StoreLogo.findOne({store: id}, async function (err, logo){
-                        if (!err){
+                if (!err) {
+                    StoreLogo.findOne({store: id}, async function (err, logo) {
+                        if (!err) {
                             const logoPath = path.join(__dirname, '../uploads', 'storeLogo', logo.name);
                             await logo.deleteOne();
                             await fs.unlinkSync(logoPath);
                         }
                     });
 
-                    StoreCoverPicture.findOne({store: id}, async function (err, coverPicture){
-                        if (!err){
+                    StoreCoverPicture.findOne({store: id}, async function (err, coverPicture) {
+                        if (!err) {
                             const coverPicturePath = path.join(__dirname, '../uploads', 'storeCoverPicture', coverPicture.name);
                             await coverPicture.deleteOne();
                             await fs.unlinkSync(coverPicturePath);
@@ -149,11 +149,17 @@ class StoreRoutes {
         }
     }
 
-    routes(){
-        this.router.post('/', this.logoUpload.fields([{name: 'storeLogo', maxCount: 1}, {name: 'storeCoverPicture', maxCount: 1}]), this.create);
+    routes() {
+        this.router.post('/', this.logoUpload.fields([{name: 'storeLogo', maxCount: 1}, {
+            name: 'storeCoverPicture',
+            maxCount: 1
+        }]), this.create);
         this.router.get('/:id', this.getSingle);
         this.router.get('/', this.getAll);
-        this.router.put('/:id', this.logoUpload.fields([{name: 'storeLogo', maxCount: 1}, {name: 'storeCoverPicture', maxCount: 1}]), this.update);
+        this.router.put('/:id', this.logoUpload.fields([{name: 'storeLogo', maxCount: 1}, {
+            name: 'storeCoverPicture',
+            maxCount: 1
+        }]), this.update);
         this.router.delete('/:id', this.delete);
     }
 }

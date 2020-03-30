@@ -1,6 +1,6 @@
 import {Schema, model} from 'mongoose';
 
-const ProductCommentSchema = new Schema({
+const StoreCommentSchema = new Schema({
     title: {
         type: String,
         required: false,
@@ -13,16 +13,16 @@ const ProductCommentSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
     },
-    product: {
+    store: {
         type: Schema.Types.ObjectId,
-        ref: 'Product',
+        ref: 'Store',
     },
-    productScore: {
+    storeScore: {
         type: Schema.Types.ObjectId,
-        ref: 'ProductScore',
+        ref: 'StoreScore',
     },
 });
 
-const ProductComment = model('ProductComment', ProductCommentSchema);
+const StoreComment = model('StoreComment', StoreCommentSchema);
 
-export default ProductComment;
+export default StoreComment;

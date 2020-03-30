@@ -1,7 +1,7 @@
 import {Router, Request, Response} from 'express';
-import UserAddress from "../models/UserAddress";
+import StoreComment from "../models/StoreComment";
 
-class UserAddressRoutes {
+class StoreCommentRoutes {
     router: Router;
 
     constructor() {
@@ -10,20 +10,22 @@ class UserAddressRoutes {
     }
 
     public async create(req: Request, res: Response): Promise<void> {
-        const address = new UserAddress(req.body);
+        const comment = new StoreComment(req.body);
 
         try {
-            const savedAddress = await address.save();
-            res.send(savedAddress);
+            const savedComment = await comment.save();
+            res.send(savedComment);
         } catch (err) {
             res.send(err);
         }
     }
 
     public async getAll(req: Request, res: Response): Promise<void> {
+        const {productID} = req.params;
+
         try {
-            const address = await UserAddress.find();
-            res.send(address);
+            const comments = await StoreComment.find({product: productID});
+            res.send(comments);
         } catch (err) {
             res.send(err);
         }
@@ -33,8 +35,8 @@ class UserAddressRoutes {
         const {id} = req.params;
 
         try {
-            const address = await UserAddress.findById(id);
-            res.send(address);
+            const comment = await StoreComment.findById(id);
+            res.send(comment);
         } catch (err) {
             res.send(err);
         }
@@ -44,8 +46,11 @@ class UserAddressRoutes {
         const {id} = req.params;
 
         try {
-            const address = await UserAddress.findByIdAndUpdate(id, req.body);
-            res.send(address);
+            const foundComment = await StoreComment.findById(id);
+            const commentBody = foundComment.body;
+            const newCommentBody = commentBody + ' ' + req.body.body;
+            const comment = await StoreComment.findByIdAndUpdate(id, {body: newCommentBody}, {new: true});
+            res.send(comment);
         } catch (err) {
             res.send(err);
         }
@@ -55,7 +60,7 @@ class UserAddressRoutes {
         const {id} = req.params;
 
         try {
-            await UserAddress.findByIdAndDelete(id);
+            await StoreComment.findByIdAndDelete(id);
             res.json({message: "Successful!"});
         } catch (err) {
             res.send(err);
@@ -65,11 +70,11 @@ class UserAddressRoutes {
     routes() {
         this.router.post('/', this.create);
         this.router.get('/:id', this.getSingle);
-        this.router.get('/', this.getAll);
+        this.router.get('/all/:productID', this.getAll);
         this.router.put('/:id', this.update);
         this.router.delete('/:id', this.delete);
     }
 }
 
-const userAddressRoutes = new UserAddressRoutes();
-export default userAddressRoutes.router;
+const storeCommentRoutes = new StoreCommentRoutes();
+export default storeCommentRoutes.router;

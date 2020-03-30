@@ -15,17 +15,18 @@ class ProductFavoriteRoutes {
         try {
             const savedFavorite = await favorite.save();
             res.send(savedFavorite);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
 
     public async getAll(req: Request, res: Response): Promise<void> {
         const {productID} = req.params;
+
         try {
             const favorites = await ProductFavorite.find({product: productID}).populate('user', ['firstName', 'lastName']);
             res.send(favorites);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -36,7 +37,7 @@ class ProductFavoriteRoutes {
         try {
             const favorite = await ProductFavorite.findById(productID).populate('user', ['firstName', 'lastName']);
             res.send(favorite);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -47,7 +48,7 @@ class ProductFavoriteRoutes {
         try {
             const favorite = await ProductFavorite.findByIdAndUpdate(id, req.body, {new: true});
             res.send(favorite);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -58,7 +59,7 @@ class ProductFavoriteRoutes {
         try {
             await ProductFavorite.findByIdAndDelete(id);
             res.json({message: "Successful!"});
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }

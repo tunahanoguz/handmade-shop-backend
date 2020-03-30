@@ -15,7 +15,7 @@ class ProductGenderRoutes {
         try {
             const savedGender = await gender.save();
             res.send(savedGender);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -24,7 +24,7 @@ class ProductGenderRoutes {
         try {
             const genders = await ProductGender.find();
             res.send(genders);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -35,7 +35,7 @@ class ProductGenderRoutes {
         try {
             const gender = await ProductGender.findById(id);
             res.send(gender);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -46,7 +46,7 @@ class ProductGenderRoutes {
         try {
             const gender = await ProductGender.findByIdAndUpdate(id, req.body, {new: true});
             res.send(gender);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -57,7 +57,7 @@ class ProductGenderRoutes {
         try {
             await ProductGender.findByIdAndDelete(id);
             res.json({message: "Successful!"});
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }

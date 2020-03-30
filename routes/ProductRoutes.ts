@@ -3,7 +3,6 @@ import multer from "multer";
 import dateformat from 'dateformat';
 import Product from "../models/Product";
 import ProductPicture from "../models/ProductPicture";
-import StoreLogo from "../models/StoreLogo";
 import path from "path";
 import fs from "fs";
 
@@ -54,23 +53,32 @@ class ProductRoutes {
     }
 
     public async getAll(req: Request, res: Response): Promise<void> {
-        const products = await Product.find().populate('store').populate('category');
-        res.send(products);
+        try {
+            const products = await Product.find().populate('store').populate('category');
+            res.send(products);
+        } catch (err) {
+            res.send(err);
+        }
     }
 
     public async getSingle(req: Request, res: Response): Promise<void> {
         const {id} = req.params;
-        await Product.findById(id)
-            .populate('store')
-            .populate('category')
-            .exec(function (err, product) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log(product.store);
-                    res.send(product);
-                }
-            });
+
+        try {
+            await Product.findById(id)
+                .populate('store')
+                .populate('category')
+                .exec(function (err, product) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log(product.store);
+                        res.send(product);
+                    }
+                });
+        } catch (err) {
+            res.send(err);
+        }
     }
 
     public async update(req: Request, res: Response): Promise<void> {
@@ -91,7 +99,7 @@ class ProductRoutes {
             });
 
             res.send(product);
-        } catch (err){
+        } catch (err) {
 
         }
     }
@@ -101,11 +109,11 @@ class ProductRoutes {
 
         try {
             await Product.findByIdAndDelete(id, function (err) {
-                if (err){
+                if (err) {
                     res.send(err);
                 } else {
-                    ProductPicture.findOne({product: id}, async function (err, picture){
-                        if (!err){
+                    ProductPicture.findOne({product: id}, async function (err, picture) {
+                        if (!err) {
                             const picturePath = path.join(__dirname, '../uploads', 'productPicture', picture.name);
                             await picture.deleteOne();
                             await fs.unlinkSync(picturePath);

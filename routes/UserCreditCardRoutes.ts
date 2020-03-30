@@ -15,7 +15,7 @@ class UserCreditCardRoutes {
         try {
             const savedCreditCard = await creditCard.save();
             res.send(savedCreditCard);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -24,7 +24,7 @@ class UserCreditCardRoutes {
         try {
             const creditCard = await UserCreditCard.find();
             res.send(creditCard);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -35,7 +35,7 @@ class UserCreditCardRoutes {
         try {
             const creditCard = await UserCreditCard.findById(id);
             res.send(creditCard);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -46,7 +46,7 @@ class UserCreditCardRoutes {
         try {
             const creditCard = await UserCreditCard.findByIdAndUpdate(id, req.body, {new: true});
             res.send(creditCard);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -57,7 +57,7 @@ class UserCreditCardRoutes {
         try {
             await UserCreditCard.findByIdAndDelete(id);
             res.json({message: "Successful!"});
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }

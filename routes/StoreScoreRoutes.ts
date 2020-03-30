@@ -15,7 +15,7 @@ class StoreScoreRoutes {
         try {
             await storeScore.save();
             res.send(storeScore);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -26,7 +26,7 @@ class StoreScoreRoutes {
         try {
             const storeScores = await StoreScore.find({store: storeID});
             res.send(storeScores);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -37,7 +37,7 @@ class StoreScoreRoutes {
         try {
             const storeScore = await StoreScore.findById(id);
             res.send(storeScore);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -48,7 +48,7 @@ class StoreScoreRoutes {
         try {
             const storeScore = await StoreScore.findByIdAndUpdate(id, req.body, {new: true});
             res.send(storeScore);
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }
@@ -59,7 +59,7 @@ class StoreScoreRoutes {
         try {
             await StoreScore.findByIdAndDelete(id);
             res.json({message: "Successful!"});
-        } catch (err){
+        } catch (err) {
             res.send(err);
         }
     }

@@ -15,30 +15,49 @@ class ProductCategoryRoutes {
         res.json(productCategory);
     }
 
-    public async getAll(req: Request, res: Response): Promise<void>{
-        const productCategories = await ProductCategory.find();
-        res.json(productCategories);
+    public async getAll(req: Request, res: Response): Promise<void> {
+        try {
+            const productCategories = await ProductCategory.find();
+            res.send(productCategories);
+        } catch (err) {
+            res.send(err);
+        }
     }
 
     public async getSingle(req: Request, res: Response): Promise<void> {
         const {id} = req.params;
-        const productCategory = await ProductCategory.findById(id);
-        res.json(productCategory);
+
+        try {
+            const productCategory = await ProductCategory.findById(id);
+            res.send(productCategory);
+        } catch (err) {
+            res.send(err);
+        }
     }
 
     public async update(req: Request, res: Response): Promise<void> {
         const {id} = req.params;
-        const productCategory = await ProductCategory.findByIdAndUpdate({id}, req.body, {new: true});
-        res.send(productCategory);
+
+        try {
+            const productCategory = await ProductCategory.findByIdAndUpdate({id}, req.body, {new: true});
+            res.send(productCategory);
+        } catch (err) {
+            res.send(err);
+        }
     }
 
     public async delete(req: Request, res: Response): Promise<void> {
         const {id} = req.params;
-        await ProductCategory.findByIdAndDelete(id);
-        res.json({message: "Successfully!"});
+
+        try {
+            await ProductCategory.findByIdAndDelete(id);
+            res.json({message: "Successfully!"});
+        } catch (err) {
+            res.send(err);
+        }
     }
 
-    routes(){
+    routes() {
         this.router.post('/', this.create);
         this.router.get('/:id', this.getSingle);
         this.router.get('/', this.getAll);
