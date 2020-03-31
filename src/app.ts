@@ -13,6 +13,7 @@ import ProductGenderRoutes from '../routes/ProductGenderRoutes';
 import OrderRoutes from '../routes/OrderRoutes'
 import RoleRoutes from '../routes/RoleRoutes';
 import StoreRoutes from '../routes/StoreRoutes';
+import StoreFavoriteRoutes from '../routes/StoreFavoriteRoutes';
 import StoreCommentRoutes from '../routes/StoreCommentRoutes';
 import StoreScoreRoutes from '../routes/StoreScoreRoutes';
 import ProductCategoryRoutes from '../routes/ProductCategoryRoutes';
@@ -55,6 +56,7 @@ class App {
         this.app.use('/order', authMiddleware, OrderRoutes);
         this.app.use('/role', authMiddleware, RoleRoutes);
         this.app.use('/store', authMiddleware, StoreRoutes);
+        this.app.use('/store-favorite', authMiddleware, StoreFavoriteRoutes);
         this.app.use('/store-comment', authMiddleware, StoreCommentRoutes);
         this.app.use('/store-score', authMiddleware, StoreScoreRoutes);
         this.app.use('/category', authMiddleware, ProductCategoryRoutes);
