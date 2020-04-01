@@ -21,10 +21,10 @@ class StoreCommentRoutes {
     }
 
     public async getAll(req: Request, res: Response): Promise<void> {
-        const {productID} = req.params;
+        const {storeID} = req.params;
 
         try {
-            const comments = await StoreComment.find({product: productID});
+            const comments = await StoreComment.find({product: storeID});
             res.send(comments);
         } catch (err) {
             res.send(err);
@@ -70,7 +70,7 @@ class StoreCommentRoutes {
     routes() {
         this.router.post('/', this.create);
         this.router.get('/:id', this.getSingle);
-        this.router.get('/all/:productID', this.getAll);
+        this.router.get('/all/:storeID', this.getAll);
         this.router.put('/:id', this.update);
         this.router.delete('/:id', this.delete);
     }

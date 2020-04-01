@@ -21,10 +21,10 @@ class StoreFavoriteRoutes {
     }
 
     public async getAll(req: Request, res: Response): Promise<void> {
-        const {productID} = req.params;
+        const {storeID} = req.params;
 
         try {
-            const favorites = await StoreFavorite.find({product: productID}).populate('user', ['firstName', 'lastName']);
+            const favorites = await StoreFavorite.find({store: storeID}).populate('user', ['firstName', 'lastName']);
             res.send(favorites);
         } catch (err) {
             res.send(err);
@@ -32,11 +32,22 @@ class StoreFavoriteRoutes {
     }
 
     public async getSingle(req: Request, res: Response): Promise<void> {
-        const {productID} = req.params;
+        const {storeID} = req.params;
 
         try {
-            const favorite = await StoreFavorite.findById(productID).populate('user', ['firstName', 'lastName']);
+            const favorite = await StoreFavorite.findById(storeID).populate('user', ['firstName', 'lastName']);
             res.send(favorite);
+        } catch (err) {
+            res.send(err);
+        }
+    }
+
+    public async getByUser(req: Request, res: Response): Promise<void> {
+        const {userID} = req.params;
+
+        try {
+            const favorites = await StoreFavorite.find({user: userID}).populate('user', ['firstName', 'lastName']);
+            res.send(favorites);
         } catch (err) {
             res.send(err);
         }
@@ -66,9 +77,10 @@ class StoreFavoriteRoutes {
 
     routes() {
         this.router.post('/', this.create);
-        this.router.get('/:productID', this.getSingle);
-        this.router.get('/all/:productID', this.getAll);
-        this.router.put('/:productID', this.update);
+        this.router.get('/:storeID', this.getSingle);
+        this.router.get('/all/:storeID', this.getAll);
+        this.router.put('/:id', this.update);
+        this.router.put('/user/:userID', this.getByUser);
         this.router.delete('/:id', this.delete);
     }
 }

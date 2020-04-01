@@ -42,6 +42,17 @@ class ProductFavoriteRoutes {
         }
     }
 
+    public async getByUser(req: Request, res: Response): Promise<void> {
+        const {userID} = req.params;
+
+        try {
+            const favorite = await ProductFavorite.find({user: userID}).populate('user', ['firstName', 'lastName']);
+            res.send(favorite);
+        } catch (err) {
+            res.send(err);
+        }
+    }
+
     public async update(req: Request, res: Response): Promise<void> {
         const {id} = req.params;
 
@@ -68,6 +79,7 @@ class ProductFavoriteRoutes {
         this.router.post('/', this.create);
         this.router.get('/:productID', this.getSingle);
         this.router.get('/all/:productID', this.getAll);
+        this.router.get('/user/:userID', this.getByUser);
         this.router.put('/:productID', this.update);
         this.router.delete('/:id', this.delete);
     }
