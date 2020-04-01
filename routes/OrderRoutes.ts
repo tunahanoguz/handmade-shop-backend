@@ -78,8 +78,8 @@ class OrderRoutes {
     routes() {
         this.router.post('/', this.create);
         this.router.get('/:id', this.getSingle);
-        this.router.get('/all-product-orders/:productID', this.getAllProductOrders);
-        this.router.get('/all-user-orders/:userID', this.getAllUserOrders);
+        this.router.get('/product/:productID', this.getAllProductOrders);
+        this.router.get('/user/:userID', this.getAllUserOrders);
         this.router.put('/:id', this.update);
         this.router.delete('/:id', this.delete);
     }
