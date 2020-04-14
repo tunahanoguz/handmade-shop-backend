@@ -17,6 +17,8 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
             }
         });
 
+        console.log(bearerHeader);
+
     } else {
         res.status(403).json({ message: 'Forbidden.' });
     }

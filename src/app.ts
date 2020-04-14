@@ -6,10 +6,12 @@ import {authMiddleware} from "./authMiddleware";
 
 import UserRoutes from "../routes/UserRoutes";
 import ProductRoutes from '../routes/ProductRoutes';
+import ProductPictureRoutes from '../routes/ProductPictureRoutes';
 import ProductFavoriteRoutes from '../routes/ProductFavoriteRoutes';
 import ProductCommentRoutes from '../routes/ProductCommentRoutes';
 import ProductScoreRoutes from '../routes/ProductScoreRoutes';
 import ProductGenderRoutes from '../routes/ProductGenderRoutes';
+import ProductTypeRoutes from '../routes/ProductTypeRoutes';
 import OrderRoutes from '../routes/OrderRoutes'
 import RoleRoutes from '../routes/RoleRoutes';
 import StoreRoutes from '../routes/StoreRoutes';
@@ -30,6 +32,7 @@ class App {
     }
 
     public config(): void {
+        this.app.use(cors());
         const MONGO_URL = 'mongodb://localhost:27017/handmade_shop';
         mongoose.connect(MONGO_URL, {
             useNewUrlParser: true,
@@ -40,19 +43,19 @@ class App {
         this.app.set('port', process.env.PORT || 5000);
         this.app.use(bodyParser.json());
         this.app.use('/uploads', express.static('uploads'));
-        this.app.use(cors());
     }
 
     public routes(): void {
         const router: express.Router = express.Router();
 
         this.app.use('/auth', UserRoutes);
-        this.app.use('/auth', UserRoutes);
         this.app.use('/product', authMiddleware, ProductRoutes);
+        this.app.use('/product-picture', authMiddleware, ProductPictureRoutes);
         this.app.use('/product-favorite', authMiddleware, ProductFavoriteRoutes);
         this.app.use('/product-comment', authMiddleware, ProductCommentRoutes);
         this.app.use('/product-score', authMiddleware, ProductScoreRoutes);
         this.app.use('/product-gender', authMiddleware, ProductGenderRoutes);
+        this.app.use('/product-type', authMiddleware, ProductTypeRoutes);
         this.app.use('/order', authMiddleware, OrderRoutes);
         this.app.use('/role', authMiddleware, RoleRoutes);
         this.app.use('/store', authMiddleware, StoreRoutes);

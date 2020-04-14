@@ -30,7 +30,6 @@ class UserRoutes {
             lastName,
             email,
             password,
-            createdAt,
             role,
         } = req.body;
 
@@ -40,7 +39,7 @@ class UserRoutes {
                 lastName,
                 email,
                 password: hash,
-                createdAt,
+                createdAt: new Date(),
                 role,
             });
 
@@ -63,9 +62,18 @@ class UserRoutes {
                         await profilePicture.save();
                     }
 
+                    const registeredUser = {
+                        _id: savedUser.id,
+                        firstName: savedUser.firstName,
+                        lastName: savedUser.lastName,
+                        email: savedUser.email,
+                        role: savedUser.role,
+                    };
+
                     res.send({
                         token,
                         refreshToken,
+                        user: registeredUser,
                     }).status(200);
                 }
             });
@@ -75,55 +83,128 @@ class UserRoutes {
     public async login(req: Request, res: Response): Promise<void> {
         const {email, password} = req.body;
 
-        await User.findOne({email}, async (err: any, user: any) => {
-            if (!err) {
-                await bcrypt.hash(password, 10, async (err: any, hash: string) => {
-                    if (!err) {
-                        await bcrypt.compare(user.password, hash, async (err, r) => {
-                            if (!err) {
-                                const token = await jwt.sign(user.toJSON(), JWT_SECRET_KEY, {
-                                    expiresIn: '1h',
-                                });
+        try {
+            const user = await User.findOne({email});
 
-                                const refreshToken = await jwt.sign(user.toJSON(), JWT_SECRET_KEY);
+            if (user){
+                const result = await user.validPassword(password);
 
-                                res.json({token, refreshToken}).status(200);
-                            } else {
-                                res.json({message: "Password is wrong."}).status(301);
-                            }
-                        });
-                    } else {
-                        res.json({message: "Password has not been bcrypted."}).status(301);
-                    }
-                });
+                if (result){
+                    const newUser = {
+                        email: user.email,
+                        password: user.password,
+                    };
+
+                    const sentUser = {
+                        _id: user.id,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        email: user.email,
+                        role: user.role,
+                    };
+
+                    const token = await jwt.sign(newUser, JWT_SECRET_KEY, {
+                        expiresIn: '1h',
+                    });
+
+                    const refreshToken = await jwt.sign(newUser, JWT_SECRET_KEY);
+
+                    res.json({token, refreshToken, user: sentUser}).status(200);
+                } else {
+                    res.json({message: "Password is wrong."}).status(401);
+                }
             } else {
-                res.json({message: "There is not such a user."}).status(301);
+                res.json({message: "There is not such a user."}).status(401);
             }
-        });
+        } catch (err){
+            console.log(err);
+        }
+
+        // await User.findOne({email}, async (err: any, user: any) => {
+        //     if (!err) {
+        //         await bcrypt.hash(password, 10, (err: any, hash: string) => {
+        //             console.log("Üretilen hash: ", hash);
+        //             if (!err) {
+        //                 bcrypt.compare(hash, user.password)
+        //                     .then(async response => {
+        //                         console.log("Cevap: ", response);
+        //                         if (response) {
+        //                             const newUser = {
+        //                                 email: user.email,
+        //                                 password: user.password,
+        //                             };
+        //
+        //                             const sentUser = {
+        //                                 _id: user.id,
+        //                                 firstName: user.firstName,
+        //                                 lastName: user.lastName,
+        //                                 email: user.email,
+        //                                 role: user.role,
+        //                             };
+        //
+        //                             const token = await jwt.sign(newUser, JWT_SECRET_KEY, {
+        //                                 expiresIn: '1h',
+        //                             });
+        //
+        //                             const refreshToken = await jwt.sign(newUser, JWT_SECRET_KEY);
+        //
+        //                             res.json({token, refreshToken, user: sentUser}).status(200);
+        //                         } else {
+        //                             res.json({message: "Password is wrong."}).status(401);
+        //                         }
+        //                     })
+        //                     .catch(() => res.json({message: "Password is wrong."}).status(401));
+        //             } else {
+        //                 res.json({message: "Password has not been bcrypted."}).status(401);
+        //             }
+        //         });
+        //     } else {
+        //         res.json({message: "There is not such a user."}).status(401);
+        //     }
+        // });
     }
 
-    public async createToken(user): Promise<object> {
-        const token = await jwt.sign(user, JWT_SECRET_KEY, {
-            expiresIn: '1h',
-        });
-
-        const refreshToken = await jwt.sign(user, JWT_SECRET_KEY);
-
-        return {
-            token,
-            refreshToken,
-        };
-    }
+    // public async createToken(user) {
+    //     try {
+    //         const token = await jwt.sign(user, JWT_SECRET_KEY, {
+    //             expiresIn: '1h',
+    //         });
+    //
+    //         const refreshToken = await jwt.sign(user, JWT_SECRET_KEY);
+    //
+    //         return {
+    //             token,
+    //             refreshToken,
+    //         };
+    //     } catch (error){
+    //         console.log(error);
+    //     }
+    // }
 
     public async refreshToken(req: Request, res: Response): Promise<void> {
         const {token} = req.body;
 
-        jwt.verify(token, JWT_SECRET_KEY, (err: any, user: any) => {
+        await jwt.verify(token, JWT_SECRET_KEY, async (err: any, user: any) => {
             if (!err) {
-                const tokens = this.createToken(user);
-                res.send(tokens).status(200);
+                const validatedUser = {
+                    email: user.email,
+                    password: user.password,
+                };
+
+                const token = await jwt.sign(validatedUser, JWT_SECRET_KEY, {
+                    expiresIn: '1h',
+                });
+
+                const refreshToken = await jwt.sign(validatedUser, JWT_SECRET_KEY);
+
+                const tokens = {
+                    token,
+                    refreshToken,
+                };
+
+                res.send(tokens);
             } else {
-                res.send(err).status(403)
+                res.send(err).status(401);
             }
         });
     }

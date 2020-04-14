@@ -1,4 +1,5 @@
 import {Schema, model} from 'mongoose';
+import bcrypt from 'bcrypt';
 
 const UserSchema = new Schema({
     firstName: {
@@ -27,6 +28,14 @@ const UserSchema = new Schema({
         ref: 'Role',
     },
 });
+
+UserSchema.methods.generateHash = async function(password) {
+    return await bcrypt.hash(password, bcrypt.genSaltSync(8), null);
+};
+
+UserSchema.methods.validPassword = async function(password) {
+    return await bcrypt.compare(password, this.password);
+};
 
 const User = model('User', UserSchema);
 

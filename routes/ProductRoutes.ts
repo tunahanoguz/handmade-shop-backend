@@ -46,18 +46,18 @@ class ProductRoutes {
                 productPicture.save();
             });
 
-            res.send(savedProduct);
+            res.send(savedProduct).status(200);
         } catch (err) {
-            res.send(err);
+            res.send(err).status(400);
         }
     }
 
     public async getAll(req: Request, res: Response): Promise<void> {
         try {
             const products = await Product.find().populate('store').populate('category');
-            res.send(products);
+            res.send(products).status(200);
         } catch (err) {
-            res.send(err);
+            res.send(err).status(400);
         }
     }
 
@@ -70,14 +70,12 @@ class ProductRoutes {
                 .populate('category')
                 .exec(function (err, product) {
                     if (err) {
-                        console.log(err);
                     } else {
-                        console.log(product.store);
-                        res.send(product);
+                        res.send(product).status(200);
                     }
                 });
         } catch (err) {
-            res.send(err);
+            res.send(err).status(400);
         }
     }
 
@@ -86,21 +84,23 @@ class ProductRoutes {
         const files = req.files;
 
         try {
-            const product = await Product.findByIdAndUpdate({id}, req.body);
+            const product = await Product.findByIdAndUpdate(id, {...req.body, updatedAt: new Date()}, {new: true});
 
-            // @ts-ignore
-            await files.map(file => {
-                const productPicture = new ProductPicture({
-                    name: file.filename,
-                    product: product,
+            if (files !== undefined){
+                // @ts-ignore
+                await files.map(file => {
+                    const productPicture = new ProductPicture({
+                        name: file.filename,
+                        product: product,
+                    });
+
+                    productPicture.save();
                 });
+            }
 
-                productPicture.save();
-            });
-
-            res.send(product);
+            res.send(product).status(200);
         } catch (err) {
-
+            res.send(err).status(400);
         }
     }
 
@@ -122,9 +122,9 @@ class ProductRoutes {
                 }
             });
 
-            res.json({message: "Successfully!"});
+            res.json({message: "Successfully!"}).status(200);
         } catch (err) {
-            res.send(err);
+            res.send(err).status(400);
         }
     }
 

@@ -25,6 +25,15 @@ const ProductSchema = new Schema({
         type: Array,
         required: false,
     },
+    createdDate: {
+        type: Date,
+        default: new Date(),
+    },
+    updatedDate: {
+        type: Date,
+        required: false,
+        default: new Date(),
+    },
     store: {
         type: Schema.Types.ObjectId,
         ref: 'Store',

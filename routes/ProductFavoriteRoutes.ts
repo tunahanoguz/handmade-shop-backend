@@ -32,10 +32,10 @@ class ProductFavoriteRoutes {
     }
 
     public async getSingle(req: Request, res: Response): Promise<void> {
-        const {productID} = req.params;
+        const {productID, userID} = req.params;
 
         try {
-            const favorite = await ProductFavorite.findById(productID).populate('user', ['firstName', 'lastName']);
+            const favorite = await ProductFavorite.find({_id: productID, user: userID});
             res.send(favorite);
         } catch (err) {
             res.send(err);
@@ -66,6 +66,7 @@ class ProductFavoriteRoutes {
 
     public async delete(req: Request, res: Response): Promise<void> {
         const {id} = req.params;
+        console.log(id);
 
         try {
             await ProductFavorite.findByIdAndDelete(id);
@@ -77,7 +78,7 @@ class ProductFavoriteRoutes {
 
     routes() {
         this.router.post('/', this.create);
-        this.router.get('/:productID', this.getSingle);
+        this.router.get('/:productID/:userID', this.getSingle);
         this.router.get('/all/:productID', this.getAll);
         this.router.get('/user/:userID', this.getByUser);
         this.router.put('/:productID', this.update);
