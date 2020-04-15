@@ -10,9 +10,8 @@ class UserAddressRoutes {
     }
 
     public async create(req: Request, res: Response): Promise<void> {
-        const address = new UserAddress(req.body);
-
         try {
+            const address = new UserAddress(req.body);
             const savedAddress = await address.save();
             res.send(savedAddress);
         } catch (err) {
@@ -22,28 +21,32 @@ class UserAddressRoutes {
 
     public async getAll(req: Request, res: Response): Promise<void> {
         try {
-            const address = await UserAddress.find();
-            res.send(address);
+            const {userID} = req.params;
+            const address = await UserAddress.find({user: userID});
+
+            if (address.length !== 0){
+                res.send(address);
+            } else {
+                res.send([]);
+            }
         } catch (err) {
             res.send(err);
         }
     }
 
     public async getSingle(req: Request, res: Response): Promise<void> {
-        const {id} = req.params;
-
         try {
+            const {id} = req.params;
             const address = await UserAddress.findById(id);
             res.send(address);
         } catch (err) {
-            res.send(err);
+            res.send(err).status(400);
         }
     }
 
     public async update(req: Request, res: Response): Promise<void> {
-        const {id} = req.params;
-
         try {
+            const {id} = req.params;
             const address = await UserAddress.findByIdAndUpdate(id, req.body);
             res.send(address);
         } catch (err) {
@@ -52,9 +55,8 @@ class UserAddressRoutes {
     }
 
     public async delete(req: Request, res: Response): Promise<void> {
-        const {id} = req.params;
-
         try {
+            const {id} = req.params;
             await UserAddress.findByIdAndDelete(id);
             res.json({message: "Successful!"});
         } catch (err) {
@@ -65,7 +67,7 @@ class UserAddressRoutes {
     routes() {
         this.router.post('/', this.create);
         this.router.get('/:id', this.getSingle);
-        this.router.get('/', this.getAll);
+        this.router.get('/all/:userID', this.getAll);
         this.router.put('/:id', this.update);
         this.router.delete('/:id', this.delete);
     }
