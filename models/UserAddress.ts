@@ -10,12 +10,16 @@ const UserAddressSchema = new Schema({
         required: true,
     },
     zip: {
-        type: Number,
+        type: String,
         required: true,
     },
     address: {
         type: String,
         required: true,
+    },
+    default: {
+        type: Boolean,
+        default: false,
     },
     user: {
         type: Schema.Types.ObjectId,

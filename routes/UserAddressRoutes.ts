@@ -47,6 +47,7 @@ class UserAddressRoutes {
     public async update(req: Request, res: Response): Promise<void> {
         try {
             const {id} = req.params;
+            console.log(req.body);
             const address = await UserAddress.findByIdAndUpdate(id, req.body);
             res.send(address);
         } catch (err) {

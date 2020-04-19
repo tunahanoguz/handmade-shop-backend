@@ -6,6 +6,7 @@ import dateformat from 'dateformat';
 import User from '../models/User';
 import ProfilePicture from '../models/ProfilePicture';
 import {JWT_SECRET_KEY} from '../src/constants';
+import UserAddress from "../models/UserAddress";
 
 class UserRoutes {
     router: Router;
@@ -95,12 +96,16 @@ class UserRoutes {
                         password: user.password,
                     };
 
+                    const address = await UserAddress.findOne({user: user.id, default: true});
+
                     const sentUser = {
                         _id: user.id,
                         firstName: user.firstName,
                         lastName: user.lastName,
                         email: user.email,
                         role: user.role,
+                        address,
+                        createdAt: user.createdAt,
                     };
 
                     const token = await jwt.sign(newUser, JWT_SECRET_KEY, {
