@@ -25,7 +25,12 @@ class OrderRoutes {
 
         try {
             const order = await Order.find({product: productID});
-            res.send(order);
+
+            if (order){
+                res.send(order);
+            } else {
+                res.json({message: 'Order not found.'}).status(400);
+            }
         } catch (err) {
             res.send(err);
         }
@@ -36,9 +41,14 @@ class OrderRoutes {
 
         try {
             const order = await Order.find({user: userID});
-            res.send(order);
+
+            if (order){
+                res.send(order);
+            } else {
+                res.json({message: 'Order not found.'}).status(400);
+            }
         } catch (err) {
-            res.send(err);
+            res.send(err).status(400);
         }
     }
 
@@ -47,9 +57,14 @@ class OrderRoutes {
 
         try {
             const order = await Order.findById(id);
-            res.send(order);
+
+            if (order){
+                res.send(order);
+            } else {
+                res.json({message: 'Order not found.'}).status(400);
+            }
         } catch (err) {
-            res.send(err);
+            res.send(err).status(400);
         }
     }
 
