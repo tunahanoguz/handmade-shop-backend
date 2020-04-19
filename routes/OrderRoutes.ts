@@ -10,9 +10,8 @@ class OrderRoutes {
     }
 
     public async create(req: Request, res: Response): Promise<void> {
-        const order = new Order(req.body);
-
         try {
+            const order = new Order(req.body);
             await order.save();
             res.send(order);
         } catch (err) {
@@ -21,57 +20,38 @@ class OrderRoutes {
     }
 
     public async getAllProductOrders(req: Request, res: Response): Promise<void> {
-        const {productID} = req.params;
-
         try {
+            const {productID} = req.params;
             const order = await Order.find({product: productID});
-
-            if (order){
-                res.send(order);
-            } else {
-                res.json({message: 'Order not found.'}).status(400);
-            }
+            res.send(order);
         } catch (err) {
             res.send(err);
         }
     }
 
     public async getAllUserOrders(req: Request, res: Response): Promise<void> {
-        const {userID} = req.params;
-
         try {
+            const {userID} = req.params;
             const order = await Order.find({user: userID});
-
-            if (order){
-                res.send(order);
-            } else {
-                res.json({message: 'Order not found.'}).status(400);
-            }
+            res.send(order);
         } catch (err) {
             res.send(err).status(400);
         }
     }
 
     public async getSingle(req: Request, res: Response): Promise<void> {
-        const {id} = req.params;
-
         try {
+            const {id} = req.params;
             const order = await Order.findById(id);
-
-            if (order){
-                res.send(order);
-            } else {
-                res.json({message: 'Order not found.'}).status(400);
-            }
+            res.send(order);
         } catch (err) {
             res.send(err).status(400);
         }
     }
 
     public async update(req: Request, res: Response): Promise<void> {
-        const {id} = req.params;
-
         try {
+            const {id} = req.params;
             const order = await Order.findByIdAndUpdate(id, req.body, {new: true});
             res.send(order);
         } catch (err) {
@@ -80,9 +60,8 @@ class OrderRoutes {
     }
 
     public async delete(req: Request, res: Response): Promise<void> {
-        const {id} = req.params;
-
         try {
+            const {id} = req.params;
             await Order.findByIdAndDelete(id);
             res.json({message: "Successful!"});
         } catch (err) {
